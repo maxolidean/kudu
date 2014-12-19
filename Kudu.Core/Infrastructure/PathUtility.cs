@@ -106,10 +106,13 @@ namespace Kudu.Core.Infrastructure
             return Path.Combine(programFiles, "nodejs", npmCliPath);
         }
 
-        internal static string ResolveMSBuildPath()
+        internal static string ResolveMSBuildPath(bool useBeta = false)
         {
             string windir = SystemEnvironment.GetFolderPath(SystemEnvironment.SpecialFolder.Windows);
-            return Path.Combine(windir, @"Microsoft.NET", "Framework", "v4.0.30319", "MSBuild.exe");
+            string programFilesx86 = SystemEnvironment.GetFolderPath(SystemEnvironment.SpecialFolder.ProgramFilesX86);
+            return useBeta
+                ? Path.Combine(programFilesx86, @"MSBuild", "14.0", "bin", "MSBuild.exe")
+                : Path.Combine(windir, @"Microsoft.NET", "Framework", "v4.0.30319", "MSBuild.exe");
         }
 
         internal static string ResolveVsTestPath()

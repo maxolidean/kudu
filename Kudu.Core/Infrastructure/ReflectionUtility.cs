@@ -20,6 +20,18 @@ namespace Kudu.Core.Infrastructure
             return (T)property.GetValue(instance, null);
         }
 
+        public static T GetValueOrDefault<T>(this PropertyInfo property, object instance)
+        {
+            try
+            {
+                return (T)property.GetValue(instance, null);
+            }
+            catch
+            {
+                return default(T);
+            }
+        }
+
         public static void SetValue(this PropertyInfo property, object instance, object value)
         {
             property.SetValue(instance, value, null);

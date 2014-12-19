@@ -59,6 +59,7 @@ namespace Kudu
         public const string X86Bit = "x86";
 
         private static readonly TimeSpan _maxAllowedExectionTime = TimeSpan.FromMinutes(30);
+        public const int BetaVisualStudioVersion = 14;
 
         public static TimeSpan MaxAllowedExecutionTime
         {

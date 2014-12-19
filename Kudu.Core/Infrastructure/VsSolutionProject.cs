@@ -11,7 +11,7 @@ namespace Kudu.Core.Infrastructure
     [DebuggerDisplay("{ProjectName}")]
     public class VsSolutionProject
     {
-        private const string ProjectInSolutionTypeName = "Microsoft.Build.Construction.ProjectInSolution, Microsoft.Build, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a";
+        private const string ProjectInSolutionTypeName = "Microsoft.Build.Construction.ProjectInSolution, Microsoft.Build, Version=12.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a";
 
         private static readonly Type _projectInSolutionType;
         private static readonly PropertyInfo _projectNameProperty;

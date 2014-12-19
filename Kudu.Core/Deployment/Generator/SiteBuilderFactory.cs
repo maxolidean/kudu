@@ -115,7 +115,8 @@ namespace Kudu.Core.Deployment.Generator
                                       _propertyProvider,
                                       repositoryRoot,
                                       project.AbsolutePath,
-                                      solution.Path);
+                                      solution.Path,
+                                      solution.VisualStudioVersion == Constants.BetaVisualStudioVersion ? true : false);
             }
 
             if (project.IsAspNet5)
@@ -252,7 +253,8 @@ namespace Kudu.Core.Deployment.Generator
                                           _propertyProvider,
                                           repositoryRoot,
                                           targetPath,
-                                          solutionPath);
+                                          solutionPath,
+                                          betaMsBuild: false);
                 }
                 else
                 {

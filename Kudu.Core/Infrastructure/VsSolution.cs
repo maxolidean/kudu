@@ -11,12 +11,13 @@ namespace Kudu.Core.Infrastructure
         // internal class SolutionParser
         // Name: Microsoft.Build.Construction.SolutionParser
         // Assembly: Microsoft.Build, Version=4.0.0.0
-        private const string SolutionParserTypeName = "Microsoft.Build.Construction.SolutionParser, Microsoft.Build, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a";
+        private const string SolutionParserTypeName = "Microsoft.Build.Construction.SolutionParser, Microsoft.Build, Version=12.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a";
 
         private static readonly Type _solutionParser;
         private static readonly PropertyInfo _solutionReaderProperty;
         private static readonly MethodInfo _parseSolutionMethod;
         private static readonly PropertyInfo _projectsProperty;
+        private static readonly PropertyInfo _visualStudioVersion;
 
         static VsSolution()
         {
@@ -27,6 +28,7 @@ namespace Kudu.Core.Infrastructure
                 _solutionReaderProperty = ReflectionUtility.GetInternalProperty(_solutionParser, "SolutionReader");
                 _projectsProperty = ReflectionUtility.GetInternalProperty(_solutionParser, "Projects");
                 _parseSolutionMethod = ReflectionUtility.GetInternalMethod(_solutionParser, "ParseSolution", Type.EmptyTypes);
+                _visualStudioVersion = ReflectionUtility.GetInternalProperty(_solutionParser, "VisualStudioVersion");
             }
         }
 
@@ -37,8 +39,19 @@ namespace Kudu.Core.Infrastructure
         {
             get
             {
-                EnsureProjects();
+                EnsureProperties();
                 return _projects;
+            }
+        }
+
+        private int _version;
+
+        public int VisualStudioVersion
+        {
+            get
+            {
+                EnsureProperties();
+                return _version;
             }
         }
 
@@ -49,9 +62,11 @@ namespace Kudu.Core.Infrastructure
             Path = solutionPath;
         }
 
-        private void EnsureProjects()
+        private bool _initialized;
+
+        private void EnsureProperties()
         {
-            if (_projects != null)
+            if (_initialized)
             {
                 return;
             }
@@ -73,6 +88,10 @@ namespace Kudu.Core.Infrastructure
             }
 
             _projects = projects;
+
+            _version = _visualStudioVersion.GetValueOrDefault<int>(solutionParser);
+
+            _initialized = true;
         }
 
         private static object GetSolutionParserInstance()
