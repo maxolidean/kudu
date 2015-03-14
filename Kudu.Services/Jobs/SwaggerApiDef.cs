@@ -12,24 +12,29 @@ namespace Kudu.Services.Jobs
     {
         [JsonProperty(PropertyName = "swagger")]
         public String Swagger { get; set; }
+
         [JsonProperty(PropertyName = "info")]
         public SwaggerApiDefInfo Info { get; private set; }
+        
         [JsonProperty(PropertyName = "host")]
         public String Host { get; private set; }
+        
         [JsonProperty(PropertyName = "schemes")]
         public List<String> Schemes { get; private set; }
+        
         [JsonProperty(PropertyName = "paths")]
         public Dictionary<String, PathItem> Paths { get; set; }
+        
         public SwaggerApiDef(IEnumerable<JobBase> triggeredJobs)
         {
             Swagger = "2.0";
             Info = new SwaggerApiDefInfo();
             Host = "placeHolder";
-            Schemes = new List<String> { "http", "https" };
+            Schemes = new List<String> { "https" };
             Paths = new Dictionary<string, PathItem>();
             foreach (var triggeredJob in triggeredJobs)
             {
-                Paths.Add("/" + triggeredJob.Name + "/run", PathItem.GetDefaultPathItem(triggeredJob.Name + "_Post"));
+                Paths.Add(String.Format("/{0}/run",triggeredJob), PathItem.GetDefaultPathItem(triggeredJob.Name));
             }
         }
     }
@@ -38,13 +43,14 @@ namespace Kudu.Services.Jobs
     {
         [JsonProperty(PropertyName = "version")]
         public String Version { get; set; }
+        
         [JsonProperty(PropertyName = "title")]
         public String Title { get; set; }
 
         public SwaggerApiDefInfo()
         {
             Version = "v1";
-            Title = "WebJobAsMicroService";
+            Title = "WebJobs";
         }
     }
 
@@ -65,24 +71,29 @@ namespace Kudu.Services.Jobs
     {
         [JsonProperty(PropertyName = "deprecated")]
         public bool Deprecated { set; get; }
+        
         [JsonProperty(PropertyName = "operationId")]
         public String OperationId { set; get; }
+        
         [JsonProperty(PropertyName = "consumes")]
         public IEnumerable<String> Consumes { set; get; }
+        
         [JsonProperty(PropertyName = "produces")]
         public IEnumerable<String> Produces { set; get; }
+        
         [JsonProperty(PropertyName = "responses")]
         public IDictionary<string, Response> Responses { set; get; }
+        
         public static Operation GetDefaultOperation(String id)
         {
-            Operation operation = new Operation();
-            operation.Deprecated = false;
-            operation.OperationId = id;
-            operation.Responses = new Dictionary<String, Response>();
-            operation.Responses.Add("200", new Response { Description = "Success" });
-            operation.Consumes = new List<String>();
-            operation.Produces = new List<String>();
-            return operation;
+            return new Operation
+            {
+                Deprecated = false,
+                OperationId = id,
+                Responses = new Dictionary<String, Response> { { "200", new Response { Description = "Success" } } },
+                Consumes = new List<String>(),
+                Produces = new List<String>()
+            };
         }
     }
 
@@ -90,14 +101,19 @@ namespace Kudu.Services.Jobs
     {
         [JsonProperty(PropertyName = "name")]
         public string Name { set; get; }
+        
         [JsonProperty(PropertyName = "in")]
         public string Input { set; get; }
+        
         [JsonProperty(PropertyName = "description")]
         public string Description { set; get; }
+        
         [JsonProperty(PropertyName = "required")]
         public bool Required { set; get; }
+        
         [JsonProperty(PropertyName = "type")]
         public string Type { set; get; }
+        
         public static Parameter GetDefaultParameter()
         {
             return new Parameter
