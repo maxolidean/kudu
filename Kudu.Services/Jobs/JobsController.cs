@@ -113,6 +113,18 @@ namespace Kudu.Services.Jobs
         }
 
         [HttpGet]
+        public HttpResponseMessage ListTriggeredJobsInSwaggerFormat()
+        {
+            IEnumerable<TriggeredJob> triggeredJobs = _triggeredJobsManager.ListJobs();
+
+            SwaggerApiDef responseSwagger = new SwaggerApiDef(triggeredJobs);
+            return Request.CreateResponse(responseSwagger);
+            //return Request.CreateResponse(HttpStatusCode.Conflict);
+            //return Request.CreateResponse(triggeredJobs.Select(c => c.RunCommand));
+            //return ListJobsResponseBasedOnETag(triggeredJobs);
+        }
+
+        [HttpGet]
         public HttpResponseMessage GetTriggeredJob(string jobName)
         {
             TriggeredJob triggeredJob = _triggeredJobsManager.GetJob(jobName);
