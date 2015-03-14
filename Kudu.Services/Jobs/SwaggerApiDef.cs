@@ -18,7 +18,6 @@ namespace Kudu.Services.Jobs
         public String Host { get; private set; }
         [JsonProperty(PropertyName = "schemes")]
         public List<String> Schemes { get; private set; }
-        //public object definitions { get; set; }
         [JsonProperty(PropertyName = "paths")]
         public Dictionary<String, PathItem> Paths { get; set; }
         public SwaggerApiDef(IEnumerable<JobBase> triggeredJobs)
@@ -28,7 +27,6 @@ namespace Kudu.Services.Jobs
             Host = "placeHolder";
             Schemes = new List<String> { "http", "https" };
             Paths = new Dictionary<string, PathItem>();
-            //definitions = new object();
             foreach (var triggeredJob in triggeredJobs)
             {
                 Paths.Add("/" + triggeredJob.Name + "/run", PathItem.GetDefaultPathItem(triggeredJob.Name + "_Post"));
@@ -75,7 +73,6 @@ namespace Kudu.Services.Jobs
         public IEnumerable<String> Produces { set; get; }
         [JsonProperty(PropertyName = "responses")]
         public IDictionary<string, Response> Responses { set; get; }
-        //public List<Parameter> parameters { set; get; }
         public static Operation GetDefaultOperation(String id)
         {
             Operation operation = new Operation();
@@ -85,8 +82,6 @@ namespace Kudu.Services.Jobs
             operation.Responses.Add("200", new Response { Description = "Success" });
             operation.Consumes = new List<String>();
             operation.Produces = new List<String>();
-            //operation.parameters = new List<Parameter>();
-            //operation.parameters.Add(Parameter.GetDefaultParameter());
             return operation;
         }
     }

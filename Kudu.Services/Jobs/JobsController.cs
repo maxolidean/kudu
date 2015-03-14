@@ -119,9 +119,6 @@ namespace Kudu.Services.Jobs
 
             SwaggerApiDef responseSwagger = new SwaggerApiDef(triggeredJobs);
             return Request.CreateResponse(responseSwagger);
-            //return Request.CreateResponse(HttpStatusCode.Conflict);
-            //return Request.CreateResponse(triggeredJobs.Select(c => c.RunCommand));
-            //return ListJobsResponseBasedOnETag(triggeredJobs);
         }
 
         [HttpGet]
