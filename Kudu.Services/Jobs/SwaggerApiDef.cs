@@ -10,72 +10,81 @@ namespace Kudu.Services.Jobs
 {
     public class SwaggerApiDef
     {
-        public String swagger {get; set;}
+        [JsonProperty(PropertyName = "swagger")]
+        public String Swagger { get; set; }
         [JsonProperty(PropertyName = "info")]
         public SwaggerApiDefInfo Info { get; private set; }
-
-        // host string should be part of the object because it will be replaced by the microservice RP
-        public String host { get; private set; }
-        public List<String> schemes { get; private set; }
+        [JsonProperty(PropertyName = "host")]
+        public String Host { get; private set; }
+        [JsonProperty(PropertyName = "schemes")]
+        public List<String> Schemes { get; private set; }
         //public object definitions { get; set; }
-        public Dictionary<String, PathItem> paths { get; set; }
-
+        [JsonProperty(PropertyName = "paths")]
+        public Dictionary<String, PathItem> Paths { get; set; }
         public SwaggerApiDef(IEnumerable<JobBase> triggeredJobs)
         {
-            swagger = "2.0";
+            Swagger = "2.0";
             Info = new SwaggerApiDefInfo();
-            host = "placeHolder";
-            schemes = new List<String> {"http", "https"};
-            paths = new Dictionary<string, PathItem>();
+            Host = "placeHolder";
+            Schemes = new List<String> { "http", "https" };
+            Paths = new Dictionary<string, PathItem>();
             //definitions = new object();
             foreach (var triggeredJob in triggeredJobs)
             {
-                paths.Add("/" + triggeredJob.Name + "/run", PathItem.GetDefaultPathItem(triggeredJob.Name + "_Post"));
+                Paths.Add("/" + triggeredJob.Name + "/run", PathItem.GetDefaultPathItem(triggeredJob.Name + "_Post"));
             }
         }
     }
 
     public class SwaggerApiDefInfo
     {
-        public String version { get; set; }
-        public String title { get; set; }
+        [JsonProperty(PropertyName = "version")]
+        public String Version { get; set; }
+        [JsonProperty(PropertyName = "title")]
+        public String Title { get; set; }
 
         public SwaggerApiDefInfo()
         {
-            version = "v1";
-            title = "WebJobAsMicroService";
+            Version = "v1";
+            Title = "WebJobAsMicroService";
         }
     }
 
     public class PathItem
     {
-        public Operation post { get; set; }
+        [JsonProperty(PropertyName = "post")]
+        public Operation Post { get; set; }
 
         public static PathItem GetDefaultPathItem(string id)
         {
             PathItem item = new PathItem();
-            item.post = Operation.GetDefaultOperation(id);
+            item.Post = Operation.GetDefaultOperation(id);
             return item;
         }
     }
 
     public class Operation
     {
-        public bool deprecated { set; get; }
-        public String operationId { set; get; }
-        public IEnumerable<String> consumes { set; get; }
-        public IEnumerable<String> produces { set; get; }
-        public IDictionary<string, Response> responses { set; get; }
+        [JsonProperty(PropertyName = "deprecated")]
+        public bool Deprecated { set; get; }
+        [JsonProperty(PropertyName = "operationId")]
+        public String OperationId { set; get; }
+        [JsonProperty(PropertyName = "consumes")]
+        public IEnumerable<String> Consumes { set; get; }
+        [JsonProperty(PropertyName = "produces")]
+        public IEnumerable<String> Produces { set; get; }
+        [JsonProperty(PropertyName = "responses")]
+        public IDictionary<string, Response> Responses { set; get; }
         //public List<Parameter> parameters { set; get; }
         public static Operation GetDefaultOperation(String id)
         {
             Operation operation = new Operation();
-            operation.deprecated = false;
-            operation.operationId = id;
-            operation.responses = new Dictionary<String,Response>();
-            operation.responses.Add("200", new Response { description = "Success" });
-            operation.consumes = new List<String>();
-            operation.produces = new List<String>();
+            operation.Deprecated = false;
+            operation.OperationId = id;
+            operation.Responses = new Dictionary<String, Response>();
+            operation.Responses.Add("200", new Response { Description = "Success" });
+            operation.Consumes = new List<String>();
+            operation.Produces = new List<String>();
             //operation.parameters = new List<Parameter>();
             //operation.parameters.Add(Parameter.GetDefaultParameter());
             return operation;
@@ -84,26 +93,32 @@ namespace Kudu.Services.Jobs
 
     public class Parameter
     {
-        public string name { set; get; }
-        public string @in {set; get;}
-        public string description { set; get; }
-        public bool required { set; get; }
-        public string type { set; get; }
+        [JsonProperty(PropertyName = "name")]
+        public string Name { set; get; }
+        [JsonProperty(PropertyName = "in")]
+        public string Input { set; get; }
+        [JsonProperty(PropertyName = "description")]
+        public string Description { set; get; }
+        [JsonProperty(PropertyName = "required")]
+        public bool Required { set; get; }
+        [JsonProperty(PropertyName = "type")]
+        public string Type { set; get; }
         public static Parameter GetDefaultParameter()
         {
             return new Parameter
             {
-                name = "arguments",
-                @in = "query",
-                description = "Web Job Arguments",
-                required = false,
-                type = "string"
+                Name = "arguments",
+                Input = "query",
+                Description = "Web Job Arguments",
+                Required = false,
+                Type = "string"
             };
         }
 
     }
     public class Response
     {
-        public string description { get; set; }
+        [JsonProperty(PropertyName = "description")]
+        public string Description { get; set; }
     }
 }
