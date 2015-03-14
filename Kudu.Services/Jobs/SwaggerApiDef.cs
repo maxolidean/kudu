@@ -10,7 +10,7 @@ namespace Kudu.Services.Jobs
 {
     public class SwaggerApiDef
     {
-        private String swagger;
+        public String swagger {get; set;}
         [JsonProperty(PropertyName = "info")]
         public SwaggerApiDefInfo Info { get; private set; }
 
@@ -23,7 +23,7 @@ namespace Kudu.Services.Jobs
         public SwaggerApiDef(IEnumerable<JobBase> triggeredJobs)
         {
             swagger = "2.0";
-            info = new SwaggerApiDefInfo();
+            Info = new SwaggerApiDefInfo();
             host = "placeHolder";
             schemes = new List<String> {"http", "https"};
             paths = new Dictionary<string, PathItem>();
